@@ -100,7 +100,28 @@ gumga-chips > div .item-container > i:hover{
   color: #000000;
 }
 
-gumga-chips > div > input{
+
+gumga-chips .input-chips-content i.material-icons{
+  position: absolute;
+  top: 12px;
+  right: 15px;
+}
+
+gumga-chips .input-chips-content{
+  position: relative;
+  min-width: 152px;
+}
+
+gumga-chips .input-chips-content{
+  float: left;
+}
+
+gumga-chips .input-chips-content.empty{
+  width: 100%;
+  float: none;
+}
+
+gumga-chips div.input-chips-content input.chips{
   margin: 8px 8px 0px 5px;
   display: block;
   padding: 0;
@@ -108,7 +129,7 @@ gumga-chips > div > input{
   border: 0;
   height: 32px;
   line-height: 32px;
-  vertical-align: baseline;
+  vertical-align: middle;
   user-select: text;
   cursor: auto;
   letter-spacing: normal;
@@ -124,6 +145,7 @@ gumga-chips > div > input{
   box-shadow: none;
   outline: none;
   background: transparent;
+  padding-right: 35px;
 }
 
 gumga-chips > div > ul{

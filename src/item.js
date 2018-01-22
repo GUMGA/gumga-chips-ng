@@ -44,6 +44,7 @@ const Item = {
           evt.stopPropagation();
         }
       }else{
+        ctrl.gumgaChipsCtrl.addFocusInput();
         evt.stopPropagation();
       }
     }

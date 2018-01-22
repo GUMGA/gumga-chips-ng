@@ -84,13 +84,12 @@ var GumgaChips = {
     'options': '?gumgaChipsOption',
     'items': '?gumgaChipsItem'
   },
-  template: '\n    <div>\n      \n      <div class="input-chips-content" ng-class="{\'input-start\' : $ctrl.isStart(), \'empty\' : !$ctrl.ngModel || $ctrl.ngModel.length == 0}">\n        <input placeholder="{{$ctrl.placeholder}}"\n        data-ng-model="$ctrl.inputValue"\n        data-ng-model-options="{debounce: $ctrl.debounce || 1000}"\n        data-ng-change="$ctrl.changeModel($ctrl.inputValue)"\n        tabindex="0"\n        ng-class="{\'item-disabled\' : $ctrl.ngDisabled}"\n        data-ng-click="$ctrl.open($event)"\n        data-ng-disabled="$ctrl.ngDisabled"\n        data-ng-focus="$ctrl.removeFocusedItems();"\n        data-ng-keyup="$ctrl.keyPress($event)"\n        class="chips"\n        style="{{$ctrl.ngModel.length == 0 ? \'width: 100%\' : \'\'}}" />\n        <span class="select-clearfix" ng-show="$ctrl.isStart()"></span>\n        <i class="material-icons">arrow_drop_down</i>\n      </div>\n\n      <div ng-transclude="items"></div>\n\n      <div class="progress indeterminate" ng-show="$ctrl.loading"></div>\n      <ul ng-transclude="options" class="options"></ul>\n      <span class="select-clearfix"></span>\n    </div>\n  ',
+  template: '\n    <div>\n      <div ng-transclude="items"></div>\n      <input placeholder="{{$ctrl.placeholder}}"\n             data-ng-model="$ctrl.inputValue"\n             data-ng-model-options="{debounce: 1000}"\n             data-ng-change="$ctrl.changeModel($ctrl.inputValue)"\n             tabindex="0"\n             ng-class="{\'item-disabled\' : $ctrl.ngDisabled}"\n             data-ng-click="$ctrl.open($event)"\n             data-ng-disabled="$ctrl.ngDisabled"\n             data-ng-focus="$ctrl.removeFocusedItems();"\n             data-ng-keyup="$ctrl.keyPress($event)"\n             style="{{$ctrl.ngModel.length == 0 ? \'width: 100%\' : \'\'}}" />\n      <div class="progress indeterminate" ng-show="$ctrl.loading"></div>\n      <ul ng-transclude="options" class="options"></ul>\n      <span class="select-clearfix"></span>\n    </div>\n  ',
   bindings: {
     ngModel: '=',
     ngDisabled: '=?',
     closeOnSelectItem: '=?',
     placeholder: '@?',
-    debounce: '=?',
     searchField: '@?',
     tagging: '&?',
     taggingModel: '=?',
@@ -101,11 +100,6 @@ var GumgaChips = {
   },
   controller: ['$scope', '$attrs', '$timeout', '$element', function ($scope, $attrs, $timeout, $element) {
     var ctrl = this;
-
-    ctrl.isStart = function () {
-      return $attrs.inputPosition == 'start';
-      console.log($attrs);
-    };
 
     ctrl.changeModel = function (value) {
       if (ctrl.searchOptions) {
@@ -306,17 +300,17 @@ var GumgaChips = {
       evt.stopPropagation();
       switch (evt.keyCode) {
         case 8:
-          if (!ctrl.inputOldValue && $attrs.filterOptionBy != 'start') {
+          if (!ctrl.inputOldValue) {
             ctrl.close();
             ctrl.removeFocusInput();
             ctrl.handlingBackspace(evt);
           }
           break;
-        case 39:
+        case 37:
           if (!ctrl.inputOldValue) {
             ctrl.removeFocusInput();
             ctrl.close();
-            ctrl.applyFocusedOrRemoveItem($element.find('gumga-chips-item').first(), evt);
+            ctrl.handlingBackspace(evt);
           }
           break;
         case 40:
@@ -380,18 +374,10 @@ var GumgaChips = {
       } else if (!ctrl.searchField && isObject) {
         var toReturn = true;
         Object.keys(option).forEach(function (key) {
-
           if (toReturn) {
-            if ($attrs.filterOptionBy == 'start') {
-              toReturn = !option[key].toString().toLowerCase().startsWith(ctrl.inputValue.toLowerCase());
-            } else if ($attrs.filterOptionBy == 'end') {
-              toReturn = !option[key].toString().toLowerCase().endsWith(ctrl.inputValue.toLowerCase());
-            } else {
-              toReturn = option[key].toString().toLowerCase().indexOf(ctrl.inputValue.toLowerCase()) == -1;
-            }
+            toReturn = option[key].toString().toLowerCase().indexOf(ctrl.inputValue.toLowerCase()) == -1;
           }
         });
-
         return toReturn;
       } else {
         return option.indexOf(ctrl.inputValue) == -1;
@@ -417,11 +403,7 @@ var GumgaChips = {
         return;
       }
       ctrl.ngModel = ctrl.ngModel || [];
-      if ($attrs.addItemPosition == 'start') {
-        ctrl.ngModel.unshift(value);
-      } else {
-        ctrl.ngModel.push(value);
-      }
+      ctrl.ngModel.push(value);
       if (ctrl.closeOnSelectItem == undefined || !ctrl.closeOnSelectItem) {
         evt.stopPropagation();
       }
@@ -504,7 +486,6 @@ var Item = {
           evt.stopPropagation();
         }
       } else {
-        ctrl.gumgaChipsCtrl.addFocusInput();
         evt.stopPropagation();
       }
     };
