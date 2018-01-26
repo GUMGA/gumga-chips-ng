@@ -9,10 +9,12 @@ const GumgaChips = {
   template: `
     <div>
       
+      <div ng-if="!$ctrl.isStart()" ng-transclude="items"></div>
+
       <div class="input-chips-content" ng-class="{'input-start' : $ctrl.isStart(), 'empty' : !$ctrl.ngModel || $ctrl.ngModel.length == 0}">
         <input placeholder="{{$ctrl.placeholder}}"
         data-ng-model="$ctrl.inputValue"
-        data-ng-model-options="{debounce: $ctrl.debounce || 1000}"
+        data-ng-model-options="{debounce: $ctrl.debounce || 0}"
         data-ng-change="$ctrl.changeModel($ctrl.inputValue)"
         tabindex="0"
         ng-class="{'item-disabled' : $ctrl.ngDisabled}"
@@ -26,11 +28,25 @@ const GumgaChips = {
         <i class="material-icons">arrow_drop_down</i>
       </div>
 
-      <div ng-transclude="items"></div>
+      <div ng-if="$ctrl.isStart()" ng-transclude="items"></div>
 
       <div class="progress indeterminate" ng-show="$ctrl.loading"></div>
-      <ul ng-transclude="options" class="options"></ul>
+      
+      <div class="content-bottom">
+        <ul ng-transclude="options" class="options"></ul>
+        <div ng-show="$ctrl.showAddNewItem()" ng-class="{'new-focused': !$ctrl.hasOptionAvaliable()}" class="show-new-option">
+          {{$ctrl.inputValue}} (novo)
+        </div>
+      </div>
+
+      <div ng-show="$ctrl.showNoOptions() && !$ctrl.tagging" class="no-options">
+        Não há mais itens para selecionar.
+      </div>
+
+      
+
       <span class="select-clearfix"></span>
+
     </div>
   `,
   bindings: {
@@ -51,9 +67,18 @@ const GumgaChips = {
     let ctrl = this;
 
     ctrl.isStart = () => {
-      return $attrs.inputPosition == 'start'
-      console.log($attrs);
+      return $attrs.inputPosition == 'start';
     };
+
+    ctrl.showAddNewItem = () => {
+      return ctrl.tagging && ctrl.inputValue != undefined && ctrl.inputValue != ''
+          && ctrl.inputValue != null && ctrl.inputValue.trim() != '' && $element.find('ul[ng-transclude="options"]').hasClass('open');
+    }
+
+    ctrl.showNoOptions = () => {
+      return $element.find('gumga-chips-option').find('li.option-container').length == 0 
+          && $element.find('ul[ng-transclude="options"]').hasClass('open');
+    }
 
     ctrl.changeModel = value => {
       if (ctrl.searchOptions) {
@@ -74,7 +99,8 @@ const GumgaChips = {
         ul[0].classList.add('open');
         $timeout(() => {
           ctrl.opened = true;
-        }, 500)
+        }, 500);
+        applyFocusedFirstOption();
       }
     }
 
@@ -193,6 +219,10 @@ const GumgaChips = {
             ctrl.nextOption(evt, next);
           } else {
             elm.find('li.option-container').removeClass('option-focused');
+            if(next.find('li').hasClass('ng-hide')){
+              ctrl.nextOption(evt, next);
+              return;
+            }
             next.find('li.option-container').addClass('option-focused');
           }
         } else {
@@ -218,6 +248,10 @@ const GumgaChips = {
           ctrl.prevOption(evt, previous);
         } else {
           elm.find('li.option-container').removeClass('option-focused');
+          if(previous.find('li').hasClass('ng-hide')){
+            ctrl.prevOption(evt, previous);
+            return;
+          }
           previous.find('li.option-container').addClass('option-focused');
         }
       } else {
@@ -260,6 +294,7 @@ const GumgaChips = {
             ctrl.removeFocusInput();
             ctrl.handlingBackspace(evt);
           }
+          applyFocusedFirstOption();
           break;
         case 39:
           if (!ctrl.inputOldValue) {
@@ -281,12 +316,13 @@ const GumgaChips = {
           break;
         case 13:
           if (!ctrl.opened) return;
+          const value = $element.find('input').val();
+          $timeout(() => delete ctrl.inputValue);
           const liFocused = $element.find('gumga-chips-option').find('li.option-container.option-focused');
           if (liFocused && liFocused[0] && !liFocused.hasClass('ng-hide')) {
             ctrl.addItem(liFocused.scope().$ctrl.ngValue, evt);
-            ctrl.handligButtonUp(evt);
+            $timeout(() => applyFocusedFirstOption());
           } else {
-            const value = $element.find('input').val();
             if (ctrl.tagging && ctrl.taggingModel && value && value.trim() != "") {
               let result = ctrl.tagging({
                 value: value
@@ -294,13 +330,42 @@ const GumgaChips = {
               if (result != null && result != undefined) {
                 ctrl.addTagging(result);
                 ctrl.addItem(result, evt);
-                ctrl.inputValue = '';
+                $timeout(() => {
+                  ctrl.inputValue = '';
+                });
               }
             }
           }
           break;
+        default:
+          applyFocusedFirstOption();
       }
       ctrl.inputOldValue = $element.find('input').val();
+      
+    }
+
+    ctrl.hasOptionAvaliable = () => {
+      $scope.asda= true
+      return $element.find('gumga-chips-option').find('li.option-container').length > 0 
+      && $element.find('gumga-chips-option').find('li.option-container:not(.ng-hide)').length > 0;
+    }
+
+    let applyFocusedFirstOption = () => {
+      $element.find('li.option-container').removeClass('option-focused');
+      if(ctrl.hasOptionAvaliable()){
+        let ell = getFirstOption(Array.from($element.find('gumga-chips-option')));
+        ell.find('li.option-container').addClass('option-focused');
+      }
+    }
+
+    let getFirstOption = (elms) => {
+      let el = angular.element(elms[0]);
+      if(el.find('li.option-container').length == 0 || el.find('li.option-container').hasClass('ng-hide')){
+        elms.shift();
+        return getFirstOption(elms);
+      }else{
+        return el;
+      }
     }
 
     let listenerClick = document.addEventListener('click', event => $timeout(() => {

@@ -63,7 +63,7 @@ gumga-chips > div .item-container.item-focused{
   outline: none;
 }
 
-gumga-chips-option li.option-focused{
+gumga-chips .option-focused{
   background: rgb(238,238,238);
   outline: none;
 }
@@ -81,11 +81,42 @@ gumga-chips > div .item-container.item-focused > i{
 }
 
 gumga-chips > div .item-container{
+  display: flex;
+  align-items: center;
   font-size: 14px;
+  max-width: 98%;
+}
+
+gumga-chips div.content-bottom{
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 100%;
+}
+
+gumga-chips div.show-new-option.new-focused{
+  background: rgb(238,238,238);
+  outline: none;
+}
+
+gumga-chips div.no-options, gumga-chips div.show-new-option{
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 100%;
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+  transition: all .4s cubic-bezier(.25,.8,.25,1);
+  border: none;
+  background: #FFF;
+  padding: 12px;
 }
 
 gumga-chips > div .item-container span{
   color: #666666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 95%;
 }
 
 gumga-chips > div .item-container > i{
@@ -148,8 +179,7 @@ gumga-chips div.input-chips-content input.chips{
   padding-right: 35px;
 }
 
-gumga-chips > div > ul{
-  position: absolute;
+gumga-chips > div ul.options{
   width: 100%;
   left: 0;
   top: 100%;
@@ -161,10 +191,12 @@ gumga-chips > div > ul{
   display: none;
   max-height: 192px;
   overflow: auto;
+  margin: 0;
 }
 
-gumga-chips > div > ul.open{
+gumga-chips > div ul.options.open{
   display: block;
+  border-top: 1px solid #ccc;
 }
 
 gumga-chips .item-disabled i{
@@ -172,7 +204,7 @@ gumga-chips .item-disabled i{
   color: #5f5b5b !important;
 }
 
-gumga-chips > div > ul li{
+gumga-chips > div ul.options li{
   font-size: 14px;
   overflow: hidden;
   padding: 0 15px;
@@ -185,7 +217,7 @@ gumga-chips > div > ul li{
   text-overflow: ellipsis;
 }
 
-gumga-chips > div > ul li:hover{
+gumga-chips > div ul.options li:hover{
   background: rgb(238,238,238);
   cursor: pointer;
 }

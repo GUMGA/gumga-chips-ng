@@ -23,8 +23,8 @@
               <label>Funcionarios: </label>
 
               <gumga-chips placeholder="Buscar opções para selecionar..."
-                           filter-option-by="start"
                            debounce="1"
+                           input-position="start"
                            ng-model="funcionarios">
                 <gumga-chips-item   ng-repeat="item in funcionarios" ng-value="item">
                   {{item.nome}}

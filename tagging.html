@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <title>ng-ui-multi-select</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="dist/ng-ui-multi-select.css">
+    <link rel="stylesheet" href="dist/gumga-chips.css">
+    <link rel="stylesheet" href="https://gumga.github.io/layout/gumga-layout/gumga-layout.css">
   </head>
   <body ng-controller="ctrl"> <br><br>
     <style media="screen">
@@ -18,22 +19,23 @@
 
 
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-5">
             <div class="form-group">
               <label>Funcionarios: </label>
 
-              <ui-multi-select placeholder="Buscar..."
-                               ng-model="funcionarios"
-                               close-on-select-item="false"
-                               tagging="addItem(value)"
-                               tagging-model="items">
-                <ui-multi-select-item   ng-repeat="item in funcionarios" ng-value="item">
+              <gumga-chips  placeholder="Buscar..."
+                            ng-model="funcionarios"
+                            close-on-select-item="false"
+                            input-position="start"
+                            tagging="addItem(value)"
+                            tagging-model="items">
+                <gumga-chips-item   ng-repeat="item in funcionarios" ng-value="item">
                   {{item.nome}}
-                </ui-multi-select-item>
-                <ui-multi-select-option ng-repeat="option in items" ng-value="option">
+                </gumga-chips-item>
+                <gumga-chips-option ng-repeat="option in items" ng-value="option">
                   {{option.nome}}
-                </ui-multi-select-option>
-              </ui-multi-select>
+                </gumga-chips-option>
+              </gumga-chips>
 
              </div>
 
@@ -92,10 +94,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-    <script type="text/javascript" src="dist/ng-ui-multi-select.js"></script>
+    <script type="text/javascript" src="dist/gumga-chips.js"></script>
 
     <script type="text/javascript">
-      angular.module('app', ['ngUiMultiSelect']).controller('ctrl', function($scope, $timeout, $http){
+      angular.module('app', ['gumga.chips']).controller('ctrl', function($scope, $timeout, $http){
 
           $scope.funcionarios = [];
 
