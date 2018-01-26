@@ -66,18 +66,28 @@ const GumgaChips = {
   controller: ['$scope', '$attrs', '$timeout', '$element', function ($scope, $attrs, $timeout, $element) {
     let ctrl = this;
 
+    const getOthersChips = () => {
+      let dates = angular.element('gumga-chips');
+      let others = dates.filter(i => !angular.equals(dates[i], $element[0]));
+      return others;
+    }
+
+    const closeOthersChips = () => {
+      angular.forEach(getOthersChips(), elm => angular.element(elm).find('div.input-chips-content').scope().$ctrl.close());
+    }
+
     ctrl.isStart = () => {
       return $attrs.inputPosition == 'start';
     };
 
     ctrl.showAddNewItem = () => {
       return ctrl.tagging && ctrl.inputValue != undefined && ctrl.inputValue != ''
-          && ctrl.inputValue != null && ctrl.inputValue.trim() != '' && $element.find('ul[ng-transclude="options"]').hasClass('open');
+        && ctrl.inputValue != null && ctrl.inputValue.trim() != '' && $element.find('ul[ng-transclude="options"]').hasClass('open');
     }
 
     ctrl.showNoOptions = () => {
-      return $element.find('gumga-chips-option').find('li.option-container').length == 0 
-          && $element.find('ul[ng-transclude="options"]').hasClass('open');
+      return $element.find('gumga-chips-option').find('li.option-container').length == 0
+        && $element.find('ul[ng-transclude="options"]').hasClass('open');
     }
 
     ctrl.changeModel = value => {
@@ -115,6 +125,7 @@ const GumgaChips = {
     }
 
     ctrl.removeFocusedItems = () => {
+      closeOthersChips();
       if ($element.find('gumga-chips-option').find('li.option-container').length == 0) {
         ctrl.changeModel();
       }
@@ -219,7 +230,7 @@ const GumgaChips = {
             ctrl.nextOption(evt, next);
           } else {
             elm.find('li.option-container').removeClass('option-focused');
-            if(next.find('li').hasClass('ng-hide')){
+            if (next.find('li').hasClass('ng-hide')) {
               ctrl.nextOption(evt, next);
               return;
             }
@@ -248,7 +259,7 @@ const GumgaChips = {
           ctrl.prevOption(evt, previous);
         } else {
           elm.find('li.option-container').removeClass('option-focused');
-          if(previous.find('li').hasClass('ng-hide')){
+          if (previous.find('li').hasClass('ng-hide')) {
             ctrl.prevOption(evt, previous);
             return;
           }
@@ -341,18 +352,18 @@ const GumgaChips = {
           applyFocusedFirstOption();
       }
       ctrl.inputOldValue = $element.find('input').val();
-      
+
     }
 
     ctrl.hasOptionAvaliable = () => {
-      $scope.asda= true
-      return $element.find('gumga-chips-option').find('li.option-container').length > 0 
-      && $element.find('gumga-chips-option').find('li.option-container:not(.ng-hide)').length > 0;
+      $scope.asda = true
+      return $element.find('gumga-chips-option').find('li.option-container').length > 0
+        && $element.find('gumga-chips-option').find('li.option-container:not(.ng-hide)').length > 0;
     }
 
     let applyFocusedFirstOption = () => {
       $element.find('li.option-container').removeClass('option-focused');
-      if(ctrl.hasOptionAvaliable()){
+      if (ctrl.hasOptionAvaliable()) {
         let ell = getFirstOption(Array.from($element.find('gumga-chips-option')));
         ell.find('li.option-container').addClass('option-focused');
       }
@@ -360,10 +371,10 @@ const GumgaChips = {
 
     let getFirstOption = (elms) => {
       let el = angular.element(elms[0]);
-      if(el.find('li.option-container').length == 0 || el.find('li.option-container').hasClass('ng-hide')){
+      if (el.find('li.option-container').length == 0 || el.find('li.option-container').hasClass('ng-hide')) {
         elms.shift();
         return getFirstOption(elms);
-      }else{
+      } else {
         return el;
       }
     }
@@ -390,11 +401,11 @@ const GumgaChips = {
         Object.keys(option).forEach(key => {
 
           if (toReturn) {
-            if($attrs.filterOptionBy == 'start'){
+            if ($attrs.filterOptionBy == 'start') {
               toReturn = !option[key].toString().toLowerCase().startsWith(ctrl.inputValue.toLowerCase());
-            }else if($attrs.filterOptionBy == 'end'){
+            } else if ($attrs.filterOptionBy == 'end') {
               toReturn = !option[key].toString().toLowerCase().endsWith(ctrl.inputValue.toLowerCase());
-            }else{
+            } else {
               toReturn = option[key].toString().toLowerCase().indexOf(ctrl.inputValue.toLowerCase()) == -1;
             }
           }
