@@ -163,15 +163,13 @@ var GumgaChips = {
     };
 
     ctrl.removeFocusedItems = function () {
+      closeOthersChips();
       if ($element.find('gumga-chips-option').find('li.option-container').length == 0) {
         ctrl.changeModel();
       }
       angular.forEach($element.find('gumga-chips-item div.item-container'), function (itemContainer) {
         angular.element(itemContainer).removeClass('item-focused');
       });
-      $timeout(function () {
-        return closeOthersChips();
-      }, 50);
     };
 
     ctrl.removeFocusedOptions = function () {
@@ -338,9 +336,6 @@ var GumgaChips = {
     ctrl.keyPress = function (evt) {
       evt.stopPropagation();
       switch (evt.keyCode) {
-        case 9:
-          ctrl.close();
-          break;
         case 8:
           if (!ctrl.inputOldValue && $attrs.filterOptionBy != 'start') {
             ctrl.close();

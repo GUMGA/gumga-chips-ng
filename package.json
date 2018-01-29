@@ -1,6 +1,6 @@
 {
   "name": "gumga-chips-ng",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "gumga-chips-ng",
   "main": "./src/index.js",
   "directories": {
