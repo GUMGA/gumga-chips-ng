@@ -56,6 +56,7 @@ const GumgaChips = {
     placeholder: '@?',
     debounce: '=?',
     searchField: '@?',
+    itemFocused: '=?', //Variavel que diz o elemento que está com foco
     tagging: '&?',
     taggingModel: '=?',
     maxItems: '=?', //limita a quantidade de itens que pode ser selecionado
@@ -131,7 +132,9 @@ const GumgaChips = {
       angular.forEach($element.find('gumga-chips-item div.item-container'), itemContainer => {
         angular.element(itemContainer).removeClass('item-focused');
       });
-      $timeout(() => closeOthersChips(), 50);
+      $timeout(() => {
+        closeOthersChips();        
+      }, 50);
     }
 
     ctrl.removeFocusedOptions = () => {
@@ -146,6 +149,7 @@ const GumgaChips = {
 
     ctrl.addFocusInput = (ignoreClick) => {
       $timeout(() => {
+        delete ctrl.itemFocused;
         if (!ignoreClick) {
           $element.find('input').click();
         }
@@ -154,6 +158,7 @@ const GumgaChips = {
     }
 
     ctrl.applyFocused = item => {
+      ctrl.itemFocused = angular.element(item).scope().$ctrl.ngValue;
       ctrl.removeFocusedItems();
       angular.element(item).addClass('item-focused');
       angular.element(item).focus();
@@ -467,6 +472,7 @@ const GumgaChips = {
       if (ctrl.onRemove) {
         ctrl.onRemove({ value: value });
       }
+      delete ctrl.itemFocused;
     }
 
     ctrl.itemIsSelect = item => {
