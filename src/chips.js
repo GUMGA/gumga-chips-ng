@@ -25,7 +25,7 @@ const GumgaChips = {
         class="chips"
         style="{{$ctrl.ngModel.length == 0 ? 'width: 100%' : ''}}" />
         <span class="select-clearfix" ng-show="$ctrl.isStart()"></span>
-        <i class="material-icons">arrow_drop_down</i>
+        <i class="material-icons arrow-drop-down" ng-click="$ctrl.addFocusInput()">arrow_drop_down</i>
       </div>
 
       <div ng-if="$ctrl.isStart()" ng-transclude="items"></div>

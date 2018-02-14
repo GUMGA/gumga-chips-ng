@@ -236,6 +236,10 @@ gumga-chips .progress {
   padding: 0;
 }
 
+gumga-chips .arrow-drop-down{
+  cursor: pointer;
+}
+
 gumga-chips .indeterminate {
   position: absolute;
   width: 100%;
