@@ -11,7 +11,7 @@ const GumgaChips = {
       
       <div ng-if="!$ctrl.isStart()" ng-transclude="items"></div>
 
-      <div class="input-chips-content" ng-class="{'input-start' : $ctrl.isStart(), 'empty' : !$ctrl.ngModel || $ctrl.ngModel.length == 0}">
+      <div class="input-chips-content" ng-class="{'full-mode' : $ctrl.modeIsFull(), 'input-start' : $ctrl.isStart(), 'empty' : !$ctrl.ngModel || $ctrl.ngModel.length == 0}">
         <input placeholder="{{$ctrl.placeholder}}"
         data-ng-model="$ctrl.inputValue"
         data-ng-model-options="{debounce: $ctrl.debounce || 0}"
@@ -76,6 +76,10 @@ const GumgaChips = {
     const closeOthersChips = () => {
       angular.forEach(getOthersChips(), elm => angular.element(elm).find('div.input-chips-content').scope().$ctrl.close());
     }
+
+    ctrl.modeIsFull = () => {
+      return $attrs.hasOwnProperty('fullMode');
+    } 
 
     ctrl.isStart = () => {
       return $attrs.inputPosition == 'start';

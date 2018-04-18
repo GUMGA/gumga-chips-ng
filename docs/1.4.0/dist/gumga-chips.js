@@ -84,7 +84,7 @@ var GumgaChips = {
     'options': '?gumgaChipsOption',
     'items': '?gumgaChipsItem'
   },
-  template: '\n    <div>\n      \n      <div ng-if="!$ctrl.isStart()" ng-transclude="items"></div>\n\n      <div class="input-chips-content" ng-class="{\'full-mode\' : $ctrl.modeIsFull(), \'input-start\' : $ctrl.isStart(), \'empty\' : !$ctrl.ngModel || $ctrl.ngModel.length == 0}">\n        <input placeholder="{{$ctrl.placeholder}}"\n        data-ng-model="$ctrl.inputValue"\n        data-ng-model-options="{debounce: $ctrl.debounce || 0}"\n        data-ng-change="$ctrl.changeModel($ctrl.inputValue)"\n        tabindex="0"\n        ng-class="{\'item-disabled\' : $ctrl.ngDisabled}"\n        data-ng-click="$ctrl.open($event)"\n        data-ng-disabled="$ctrl.ngDisabled"\n        data-ng-focus="$ctrl.removeFocusedItems();"\n        data-ng-keyup="$ctrl.keyPress($event)"\n        class="chips"\n        style="{{$ctrl.ngModel.length == 0 ? \'width: 100%\' : \'\'}}" />\n        <span class="select-clearfix" ng-show="$ctrl.isStart()"></span>\n        <i class="material-icons arrow-drop-down" ng-click="$ctrl.addFocusInput()">arrow_drop_down</i>\n      </div>\n\n      <div ng-if="$ctrl.isStart()" ng-transclude="items"></div>\n\n      <div class="progress indeterminate" ng-show="$ctrl.loading"></div>\n      \n      <div class="content-bottom">\n        <ul ng-transclude="options" class="options"></ul>\n        <div ng-show="$ctrl.showAddNewItem()" ng-class="{\'new-focused\': !$ctrl.hasOptionAvaliable()}" class="show-new-option">\n          {{$ctrl.inputValue}} (novo)\n        </div>\n      </div>\n\n      <div ng-show="$ctrl.showNoOptions() && !$ctrl.tagging" class="no-options">\n        N\xE3o h\xE1 mais itens para selecionar.\n      </div>\n\n      \n\n      <span class="select-clearfix"></span>\n\n    </div>\n  ',
+  template: '\n    <div>\n      \n      <div ng-if="!$ctrl.isStart()" ng-transclude="items"></div>\n\n      <div class="input-chips-content" ng-class="{\'input-start\' : $ctrl.isStart(), \'empty\' : !$ctrl.ngModel || $ctrl.ngModel.length == 0}">\n        <input placeholder="{{$ctrl.placeholder}}"\n        data-ng-model="$ctrl.inputValue"\n        data-ng-model-options="{debounce: $ctrl.debounce || 0}"\n        data-ng-change="$ctrl.changeModel($ctrl.inputValue)"\n        tabindex="0"\n        ng-class="{\'item-disabled\' : $ctrl.ngDisabled}"\n        data-ng-click="$ctrl.open($event)"\n        data-ng-disabled="$ctrl.ngDisabled"\n        data-ng-focus="$ctrl.removeFocusedItems();"\n        data-ng-keyup="$ctrl.keyPress($event)"\n        class="chips"\n        style="{{$ctrl.ngModel.length == 0 ? \'width: 100%\' : \'\'}}" />\n        <span class="select-clearfix" ng-show="$ctrl.isStart()"></span>\n        <i class="material-icons arrow-drop-down" ng-click="$ctrl.addFocusInput()">arrow_drop_down</i>\n      </div>\n\n      <div ng-if="$ctrl.isStart()" ng-transclude="items"></div>\n\n      <div class="progress indeterminate" ng-show="$ctrl.loading"></div>\n      \n      <div class="content-bottom">\n        <ul ng-transclude="options" class="options"></ul>\n        <div ng-show="$ctrl.showAddNewItem()" ng-class="{\'new-focused\': !$ctrl.hasOptionAvaliable()}" class="show-new-option">\n          {{$ctrl.inputValue}} (novo)\n        </div>\n      </div>\n\n      <div ng-show="$ctrl.showNoOptions() && !$ctrl.tagging" class="no-options">\n        N\xE3o h\xE1 mais itens para selecionar.\n      </div>\n\n      \n\n      <span class="select-clearfix"></span>\n\n    </div>\n  ',
   bindings: {
     ngModel: '=',
     ngDisabled: '=?',
@@ -115,10 +115,6 @@ var GumgaChips = {
       angular.forEach(getOthersChips(), function (elm) {
         return angular.element(elm).find('div.input-chips-content').scope().$ctrl.close();
       });
-    };
-
-    ctrl.modeIsFull = function () {
-      return $attrs.hasOwnProperty('fullMode');
     };
 
     ctrl.isStart = function () {
@@ -637,16 +633,6 @@ var Item = {
             break;
           case 46:
             ctrl.gumgaChipsCtrl.handlingBackspace(evt);
-            break;
-          case 40:
-            ctrl.moveFocusToRight(evt);
-            evt.preventDefault();
-            evt.stopPropagation();
-            break;
-          case 38:
-            ctrl.moveFocusToLeft(evt);
-            evt.preventDefault();
-            evt.stopPropagation();
             break;
           case 39:
             ctrl.moveFocusToRight(evt);

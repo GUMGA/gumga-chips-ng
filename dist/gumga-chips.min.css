@@ -86,12 +86,21 @@ gumga-chips > div .item-container{
   max-width: 98%;
 }
 
+gumga-chips[full-mode] > div .item-container{
+  border-radius: 3px;
+  width: 100%;
+}
+
 gumga-chips div.content-bottom{
   position: absolute;
   width: 100%;
   left: 0;
   z-index: 1;
   top: 100%;
+}
+
+gumga-chips[full-mode][input-position="start"] div.content-bottom{
+  top: 45px;
 }
 
 gumga-chips div.show-new-option.new-focused{
@@ -112,12 +121,17 @@ gumga-chips div.no-options, gumga-chips div.show-new-option{
   padding: 12px;
 }
 
+gumga-chips[full-mode][input-position="start"] div.no-options, gumga-chips div.show-new-option{
+  top: 45px;
+}
+
 gumga-chips > div .item-container span{
   color: #666666;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 95%;
+  flex: 1;
 }
 
 gumga-chips > div .item-container > i{
@@ -146,6 +160,19 @@ gumga-chips .input-chips-content{
 
 gumga-chips .input-chips-content{
   float: left;
+}
+
+gumga-chips .input-chips-content.full-mode{
+  width: 100%;
+  float: none;
+  margin-left: -5px;
+  overflow: hidden;
+}
+
+gumga-chips[full-mode] div.input-chips-content input.chips{
+  width: 100%;
+  padding-right: 50px;
+  margin-left: 12px;
 }
 
 gumga-chips .input-chips-content.empty{
@@ -272,3 +299,13 @@ gumga-chips .indeterminate:after {
     transform: translateX(100%);
   }
 }
+
+
+gumga-chips[full-mode] > div {
+  display: flex;
+  flex-direction: column;
+}
+
+/* gumga-chips[input-position="bottom"] .input-chips-content.full-mode{
+  order: 2;
+} */
